@@ -1,0 +1,49 @@
+P_Nind:    1000
+P_Nsp:     1
+P_Nsuper:  1e11
+P_Cquota:  [3.0e-12, 3.0e-12]
+P_mean:    1.5
+P_var:     0.3
+diag_freq: 3600
+#           1 2 3 4 5 6 7 8 9 10 11 12 13 14 
+diag_inds: [1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1]
+useDOC:    [0,1]
+Grz_P:     1000
+PCmax:     [1.8,1.8] # per day
+α:         [2.0e-2,3.0e-2]
+Φ:         [4.0e-5,4.0e-5]
+inhibcoef: [0.0,0.0]
+dvid_type: [1,1]
+P_dvid:    [0.1,0.1]
+dvid_stp:  [6.0,6.0]
+#          sizer,adder,timer1-3
+dvid_reg:  [2.2,2.2]
+death_age: 360.0
+a_death:   0.0
+VNH4max:   [0.3,0.3] # per day
+VNO3max:   [0.6,0.6] # per day
+VPmax:     [0.06,0.06] # per day
+Nqmax:     [0.3,0.3]
+Nqmin:     [0.14,0.14]
+Pqmax:     [0.03,0.03]
+Pqmin:     [0.008,0.008]
+Cqmax:     [0.3,0.3]
+Cqmin:     [0.1,0.1]
+KsatNH4:   [0.10,0.10]
+KsatNO3:   [0.05,0.05]
+KsatP:     [0.02,0.02]
+KsatDOC:   [0.00,0.00]
+VN_b:      [0.6,0.6]
+VP_b:      [0.6,0.6]
+VDOC_b:    [0.6,0.6]
+a_β:       [6.0,6.0]
+b_β:       [-2.2,-2.2]
+k_mtb:     [6.0,6.0] # per day
+b_k_mtb:   [0.8,0.8]
+respir_ex: 0.0
+kDON:      7.716e-7 #1/15/86400
+kDOP:      7.716e-7 #1/15/86400
+kPON:      7.716e-7 #1/15/86400
+kPOP:      7.716e-7 #1/15/86400
+κhP:       1.0e-5
+κvP:       1.0e-5

@@ -25,7 +25,7 @@
 # + [markdown] slideshow={"slide_type": "fragment"}
 # ## For more documentation
 # - <https://zhenwu0728.github.io/PlanktonIndividuals.jl/dev/> for PlanktonIndividuals.jl
-# - <https://github.com/JuliaPy/PyPlot.jl> for PyPlot.jl
+# - <http://docs.juliaplots.org/latest/> for Plots.jl
 # - <https://docs.julialang.org/en/v1/> for Julia
 
 # + [markdown] slideshow={"slide_type": "slide"}
@@ -78,7 +78,7 @@
 # ## 1. Import Software, i.e. `Julia` Packages
 
 # + slideshow={"slide_type": "fragment"}
-using PlanktonIndividuals, Oceananigans, YAML, KernelDensity, DelimitedFiles, PyPlot
+using PlanktonIndividuals, Oceananigans, YAML, KernelDensity, DelimitedFiles, Plots
 
 # + [markdown] slideshow={"slide_type": "slide"}
 # ## 2. Initialize the model
@@ -141,78 +141,70 @@ end
 # + slideshow={"slide_type": "skip"}
 # post-processing model results
 include("post_process.jl")
-c = ["r","b","g","c","m"]
-titles = ["Population (cell)", "Division (per day)", "Average Cell Size", "Grazing (per day)", "Generation",
-          "Biomass (mmol/cell)", "C Reserve (mmol/cell)", "N Reserve (mmol/cell)", "P Reserve (mmol/cell)", "Average Age (hour)"]
+c = [:red,:blue]
+titles = ["Population (10^{14} cell)", "Division (per day)", "Average Cell Size", "Grazing (per day)", "Generation",
+          "Biomass (fgC/cell)", "C Reserve (fgC/cell)", "N Reserve (fgN/cell)", "P Reserve (fgP/cell)", "Average Age (hour)"]
 tcks = collect(0:86400:86400*nday);
 lbs = ["0","1","2","3","4","5","6","7","8","9","10"]
 labels = ["Species 1","Species 2"];
 
 # + [markdown] slideshow={"slide_type": "slide"}
-# ## 4. Visualization using `PyPlot.jl`
-# Similar to `matplotlib.pyplot` in Python
+# ## 4. Visualization using `Plots.jl`
 
 # + slideshow={"slide_type": "fragment"}
-fig, axs = PyPlot.subplots(5,2,sharex=true,figsize=(12,10))
-for i in 1:Nsp
-    axs[1].plot(collect(1:60:86400*nday),rawdata[:,2,i] .* 1e11,label =labels[i],color=c[i])
-    axs[2].plot(collect(1:3600:86400*nday),pops[:,i,1] ./ pops[:,i,2] .* 24,label =labels[i],color=c[i])
-    axs[3].plot(collect(1:60:86400*nday),rawdata[:,5,i],label =labels[i],color=c[i])
-    axs[4].plot(collect(1:3600:86400*nday),pops[:,1,3] ./ pops[:,1,2] .* 24,label =labels[i],color=c[i])
-    axs[5].plot(collect(1:60:86400*nday),rawdata[:,3,i],label =labels[i],color=c[i])
-    axs[6].plot(collect(1:60:86400*nday),rawdata[:,6,i] ./ 1e11,label =labels[i],color=c[i])
-    axs[7].plot(collect(1:60:86400*nday),rawdata[:,7,i] ./ 1e11,label =labels[i],color=c[i])
-    axs[8].plot(collect(1:60:86400*nday),rawdata[:,8,i] ./ 1e11,label =labels[i],color=c[i])
-    axs[9].plot(collect(1:60:86400*nday),rawdata[:,9,i] ./ 1e11,label =labels[i],color=c[i])
-    axs[10].plot(collect(1:60:86400*nday),rawdata[:,4,i],label =labels[i],color=c[i])
-end
-for ax in axs
-    ax.tick_params("both",direction="in")
-    ax.set_xticks(tcks[1:nday+1])
-    ax.set_xticklabels(lbs[1:nday+1])
-end
+p=[]
 for i in 1:10
-    axs[i].set_title(titles[i])
+    if i>8
+        pt = plot(xlabel="Time (day)",title=titles[i])
+    else
+        pt = plot(title=titles[i])
+    end
+    push!(p,pt)
 end
-axs[1].legend(loc=2, fontsize=9)
-axs[5].set_xlabel("Time(day)")
-axs[10].set_xlabel("Time(day)")
-fig.subplots_adjust(hspace=0.3)
-fig.set_visible(false)
-nothing
+plt = plot(p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9],p[10],layout = (5,2),size=(1000,1000))
+for i in 1:Nsp
+    plot!(p[1],collect(1:60:86400*nday),rawdata[:,2,i] ./ 1e3,label=labels[i],color=c[i],
+        xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :best)
+    plot!(p[2],collect(1:3600:86400*nday),pops[:,i,1] ./ pops[:,i,2] .* 24,label=labels[i],color=c[i],
+        xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
+    plot!(p[3],collect(1:60:86400*nday),rawdata[:,5,i],label=labels[i],color=c[i],
+        xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
+    plot!(p[4],collect(1:3600:86400*nday),pops[:,1,3] ./ pops[:,1,2] .* 24,label =labels[i],color=c[i],
+        xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
+    plot!(p[5],collect(1:60:86400*nday),rawdata[:,3,i],label =labels[i],color=c[i],
+        xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
+    plot!(p[6],collect(1:60:86400*nday),rawdata[:,6,i] ./ 1e11 .* 12 .*1e12,label =labels[i],color=c[i],
+        xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
+    plot!(p[7],collect(1:60:86400*nday),rawdata[:,7,i] ./ 1e11 .* 12 .*1e12,label =labels[i],color=c[i], 
+        xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
+    plot!(p[8],collect(1:60:86400*nday),rawdata[:,8,i] ./ 1e11 .* 14 .*1e12,label =labels[i],color=c[i],
+        xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
+    plot!(p[9],collect(1:60:86400*nday),rawdata[:,9,i] ./ 1e11 .* 31 .*1e12,label =labels[i],color=c[i],
+        xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
+    plot!(p[10],collect(1:60:86400*nday),rawdata[:,4,i],label =labels[i],color=c[i],
+        xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
+end
 
 # + slideshow={"slide_type": "subslide"}
-fig.set_visible(true)
-fig
+plt
 
 # + slideshow={"slide_type": "slide"}
-fig,ax = plt.subplots(1,1,figsize=(8,3),sharex=true)
-p = ax.pcolormesh(collect(0:60:86400*nday),collect(0.8:0.05:3),size_dens[:,:,1] ./ 20)
-ax.set_ylim(0.9,3)
-ax.set_ylabel("Relative Cell Size")
-ax.set_xticks(tcks[1:nday+1])
-ax.set_xticklabels(lbs[1:nday+1])
-p1b = fig.colorbar(p,ax=ax, pad = 0.01)
-p1b.set_label("Size Class Proportion")
-ax.set_xlabel("Time(day)");
-#plt.savefig("size_distribution.png")
+p = heatmap(collect(1:60:86400*nday),collect(0.8:0.05:3),size_dens[:,:,1] ./ 20,
+    xticks=([1:3600*24:86400*3;],lbs[1:3]),xlabel="Time (day)",ylabel="Relative Cell Size",
+    colorbar_title="Size Class Proportion", size=(600,300))
 
 # + [markdown] slideshow={"slide_type": "fragment"}
 # ### for >=2 species, use code below to plot
 
 # + slideshow={"slide_type": "fragment"}
-fig,axs = plt.subplots(Nsp,1,figsize=(8,3*Nsp),sharex=true)
+p=[]
 for i in 1:Nsp
-    p = axs[i].pcolormesh(collect(0:60:86400*nday),collect(0.8:0.05:3),size_dens[:,:,i] ./ 20)
-    axs[i].set_ylim(0.9,3)
-    axs[i].set_ylabel("Relative Cell Size")
-    axs[i].set_xticks(tcks[1:nday+1])
-    axs[i].set_xticklabels(lbs[1:nday+1])
-    p1b = fig.colorbar(p,ax=axs[i], pad = 0.01)
-    p1b.set_label("Size Class Proportion")
+    pt = heatmap(collect(1:60:86400*nday),collect(0.8:0.05:3),size_dens[:,:,i] ./ 20,
+        xticks=([1:3600*24:86400*3;],lbs[1:3]),xlabel="Time (day)",ylabel="Relative Cell Size",
+        colorbar_title="Size Class Proportion", size=(600,300))
+    push!(p,pt)
 end
-axs[Nsp].set_xlabel("Time(day)");
-#plt.savefig("size_distribution.png")
+plot(p[1],p[2], layout=(Nsp,1),size=(600,300*Nsp)) # p[3],p[4]...
 
 # + [markdown] slideshow={"slide_type": "slide"}
 # ## Thing to do next...
@@ -225,6 +217,3 @@ axs[Nsp].set_xlabel("Time(day)");
 #     - Single cell example
 #     - Heat induced vertical convection
 #     - Random location of the individual
-# -
-
-

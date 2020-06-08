@@ -169,7 +169,7 @@ for i in 1:Nsp
         xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
     plot!(p[3],collect(1:60:86400*nday),rawdata[:,5,i],label=labels[i],color=c[i],
         xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
-    plot!(p[4],collect(1:3600:86400*nday),pops[:,1,3] ./ pops[:,1,2] .* 24,label =labels[i],color=c[i],
+    plot!(p[4],collect(1:3600:86400*nday),pops[:,i,3] ./ pops[:,i,2] .* 24,label =labels[i],color=c[i],
         xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
     plot!(p[5],collect(1:60:86400*nday),rawdata[:,3,i],label =labels[i],color=c[i],
         xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
@@ -184,6 +184,9 @@ for i in 1:Nsp
     plot!(p[10],collect(1:60:86400*nday),rawdata[:,4,i],label =labels[i],color=c[i],
         xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
 end
+# -
+
+
 
 # + slideshow={"slide_type": "subslide"}
 plt

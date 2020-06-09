@@ -184,10 +184,6 @@ for i in 1:Nsp
     plot!(p[10],collect(1:60:86400*nday),rawdata[:,4,i],label =labels[i],color=c[i],
         xticks=([1:3600*24:86400*3;],lbs[1:3]),legend = :none)
 end
-# -
-
-
-
 # + slideshow={"slide_type": "subslide"}
 plt
 
@@ -197,9 +193,10 @@ p = heatmap(collect(1:60:86400*nday),collect(0.8:0.05:3),size_dens[:,:,1] ./ 20,
     colorbar_title="Size Class Proportion", size=(600,300))
 
 # + [markdown] slideshow={"slide_type": "fragment"}
-# ### for >=2 species, use code below to plot
+# ### for >=2 species, uncomment and use code below to plot
 
 # + slideshow={"slide_type": "fragment"}
+#=
 p=[]
 for i in 1:Nsp
     pt = heatmap(collect(1:60:86400*nday),collect(0.8:0.05:3),size_dens[:,:,i] ./ 20,
@@ -208,6 +205,7 @@ for i in 1:Nsp
     push!(p,pt)
 end
 plot(p[1],p[2], layout=(Nsp,1),size=(600,300*Nsp)) # p[3],p[4]...
+=#
 
 # + [markdown] slideshow={"slide_type": "slide"}
 # ## Thing to do next...

@@ -507,7 +507,7 @@ uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 
 [[PlanktonIndividuals]]
 deps = ["Distributions", "Interpolations", "NCDatasets", "Printf", "Random", "Serialization", "Statistics"]
-git-tree-sha1 = "3ecd66232aed19af7317d2abcf26283151763250"
+git-tree-sha1 = "842582f47d100c71fbe13b350e2e8a89fa0bcb00"
 repo-rev = "master"
 repo-url = "https://github.com/zhenwu0728/PlanktonIndividuals.jl.git"
 uuid = "dfeb4ede-c75e-11e9-050d-41ab7a730e9e"
